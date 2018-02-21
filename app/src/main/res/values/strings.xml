@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Ele_Sms</string>
+    <string name="action_search">Search</string>
+    <string name="internet_error_msg">Unable to load Pictures of the day. Please check your internet connection.</string>
+    <string name="no_result_found_msg">No Results Found.</string>
+
+
+    <string-array name="bank_names">
+        <item>Bank of Baroda</item>
+        <item>Corporation Bank</item>
+        <item>Indian Overseas Bank</item>
+        <item>Canara Bank</item>
+        <item>HDFC</item>
+        <item>ICICI Bank</item>
+        <item>Kotak Mahindra</item>
+        <item>Punjab National Bank</item>
+        <item>SBI</item>
+        <item>Syndicate Bank</item>
+        <item>Union Bank of India</item>
+        <item>Vijaya Bank</item>
+        <item>ABN Amro</item>
+        <item>American Express</item>
+        <item>ANZ</item>
+        <item>Barclays Bank</item>
+        <item>Citibank</item>
+        <item>Diners Club</item>
+        <item>HSBC</item>
+        <item>Standard Chartered</item>
+    </string-array>
+</resources>
