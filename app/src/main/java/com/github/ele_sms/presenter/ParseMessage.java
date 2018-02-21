@@ -1,4 +1,4 @@
-package com.github.ele_sms;
+package com.github.ele_sms.presenter;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -23,6 +23,8 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     private static final String TAG = ParseMessage.class.getSimpleName();
     private String currencySymbol;
     private ParseMessageCallback parseMessageCallback;
+
+
     ParseMessage(String currencySymbol, ParseMessageCallback parseMessageCallback) {
         this.currencySymbol = currencySymbol;
         this.parseMessageCallback = parseMessageCallback;
@@ -32,7 +34,9 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        parseMessageCallback.onPreExecute();
+        if (parseMessageCallback != null) {
+            parseMessageCallback.onPreExecute();
+        }
     }
 
     @Override
@@ -44,6 +48,8 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
             String msgDate = c.getString(c.getColumnIndexOrThrow("date"));
             String body = c.getString(c.getColumnIndexOrThrow("body"));
 
+
+            //Search for Messsages with XX-XXXXXX pattern in address
             Pattern pattern = Pattern.compile("[a-zA-Z0-9]{2}-([a-zA-Z0-9]{6})");
             Matcher matcher = pattern.matcher(senderAddres);
 
@@ -79,7 +85,7 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
         if (transAmountMatcher.find() && cardNumberMatcher.find() && transDateMatcher.find())
         {
 
-            Log.e(TAG, transAmountMatcher.group(1) + "|" + cardNumberMatcher.group(1) + "|" + transDateMatcher.group(1));
+            //Log.e(TAG, transAmountMatcher.group(1) + "|" + cardNumberMatcher.group(1) + "|" + transDateMatcher.group(1));
             String transAmount = NumberFormat.getCurrencyInstance(new Locale("en", "in"))
                     .format(Double.parseDouble(transAmountMatcher.group(1)));
             String transDate = transDateMatcher.group(1);
@@ -109,8 +115,10 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     @Override
     protected void onPostExecute(List<Data_Model> data_models) {
         super.onPostExecute(data_models);
-        Log.e(TAG, "onPostExecute : " + "size:" + data_models.size());
-        parseMessageCallback.onPostExecute(data_models);
+        //Log.e(TAG, "onPostExecute : " + "size:" + data_models.size());
+        if (parseMessageCallback != null) {
+            parseMessageCallback.onPostExecute(data_models);
+        }
     }
 
     interface ParseMessageCallback {
