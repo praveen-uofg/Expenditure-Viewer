@@ -4,6 +4,7 @@ package com.github.eletransactionviewer.allTransactions;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
@@ -64,7 +65,7 @@ public class AllTransactionFragment extends Fragment implements ParseMessage.Par
 
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
-        mProgressBar = view.findViewById(R.id.progressBar1);
+        mProgressBar = view.findViewById(R.id.content_progress_bar);
         errorLayoutContainer = view.findViewById(R.id.error_message_container);
         // Inflate the layout for this fragment
         return view;
@@ -89,13 +90,31 @@ public class AllTransactionFragment extends Fragment implements ParseMessage.Par
 
 
     void fetchData() {
-        Log.e(TAG, "fetchData()");
+        //Log.e(TAG, "fetchData()");
         ContentResolver cr = mContext.getContentResolver();
         mCursor = cr.query(Telephony.Sms.Inbox.CONTENT_URI, // Official CONTENT_URI from docs
                 new String[] { Telephony.Sms.Inbox.ADDRESS, Telephony.Sms.Inbox.DATE, Telephony.Sms.Inbox.BODY}, // Select body text
                 null,
                 null,
                 Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
+
+
+        if (mContext.getPackageManager().hasSystemFeature("android.hardware.telephony")) {
+
+            mCursor = cr.query(Telephony.Sms.Inbox.CONTENT_URI, // Official CONTENT_URI from docs
+                    new String[]{Telephony.Sms.Inbox.ADDRESS, Telephony.Sms.Inbox.DATE, Telephony.Sms.Inbox.BODY}, // Select body text
+                    null,
+                    null,
+                    Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
+
+        } else {
+            Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
+            mCursor = cr.query(mSmsinboxQueryUri, // Official CONTENT_URI from docs
+                    new String[]{"address", "date", "body"}, // Select body text
+                    null,
+                    null,
+                    "date DESC");
+        }
         if (mCursor != null && mCursor.getCount() > 0) {
             Log.e(TAG, "fetchData() Total Messages: "  +mCursor.getCount());
             mCursor.moveToFirst();

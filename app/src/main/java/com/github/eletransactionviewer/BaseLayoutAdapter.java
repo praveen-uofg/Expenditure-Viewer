@@ -25,7 +25,7 @@ public abstract  class BaseLayoutAdapter<T>  extends RecyclerView.Adapter<BaseLa
         }
 
         public void bind(Object obj, int resId) {
-            Log.e("BaseAdapter", "bind() : resId-" + resId);
+            //Log.e("BaseAdapter", "bind() : resId-" + resId);
             binding.setVariable(resId, obj);
             binding.executePendingBindings();
         }
@@ -37,7 +37,7 @@ public abstract  class BaseLayoutAdapter<T>  extends RecyclerView.Adapter<BaseLa
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.e("BaseAdapter", "onCreateViewHolder");
+        //Log.e("BaseAdapter", "onCreateViewHolder");
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ViewDataBinding binding = DataBindingUtil.inflate(layoutInflater, getLayoutIdForType(viewType), parent, false);
         return new ViewHolder(binding);
@@ -45,7 +45,7 @@ public abstract  class BaseLayoutAdapter<T>  extends RecyclerView.Adapter<BaseLa
 
     @Override
     public void onBindViewHolder(BaseLayoutAdapter.ViewHolder holder, int position) {
-        Log.e("BaseAdapter", "onBindViewHolder : position: " + position + "| data: " + getDataAtPosition(position).toString());
+        //Log.e("BaseAdapter", "onBindViewHolder : position: " + position + "| data: " + getDataAtPosition(position).toString());
         holder.bind(getDataAtPosition(position), getBindedDataObjectResourceId());
     }
 

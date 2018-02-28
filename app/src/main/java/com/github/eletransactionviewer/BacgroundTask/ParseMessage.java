@@ -58,8 +58,8 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
 
             body = body.toLowerCase().replaceAll(",", "");
 
-            if (matcher.find() && body.indexOf("spent") > 0 && body.contains(currencySymbol.toLowerCase())) {
-                //Log.e(TAG, body);
+            if (matcher.find() && ((body.indexOf("spent") > 0 && body.contains("rs.")) || body.contains("txn of inr"))) {
+                Log.e(TAG, "First Pattern Matched : " + senderAddres + " | " + body);
                 Data_Model dataModel = parseMessage(body);
                 if (dataModel != null) {
                     msgDate = getDate(msgDate);
@@ -120,7 +120,7 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     @Override
     protected void onPostExecute(List<Data_Model> data_models) {
         super.onPostExecute(data_models);
-        //Log.e(TAG, "onPostExecute : " + "size:" + data_models.size());
+        Log.e(TAG, "onPostExecute : " + "size:" + data_models.size());
         if (parseMessageCallback != null) {
             parseMessageCallback.onPostExecute(data_models);
         }

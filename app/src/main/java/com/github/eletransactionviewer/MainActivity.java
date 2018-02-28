@@ -21,6 +21,7 @@ import com.github.eletransactionviewer.allTransactions.AllTransactionFragment;
 import com.github.eletransactionviewer.monthlyTransactions.MonthWiseFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         if (isPermissionGranted()) {
+            Log.d(TAG, "onCreate() Permission Granted");
             mViewPager.setAdapter(mSectionsPagerAdapter);
             tabLayout.setupWithViewPager(mViewPager);
         }
@@ -86,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
-                //Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onRequestPermissionsResult() Permission Granted");
                 mViewPager.setAdapter(mSectionsPagerAdapter);
                 tabLayout.setupWithViewPager(mViewPager);
 

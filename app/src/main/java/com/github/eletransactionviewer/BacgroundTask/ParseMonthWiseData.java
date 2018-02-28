@@ -47,15 +47,19 @@ public class ParseMonthWiseData extends AsyncTask<Cursor, Void, List<MonthWiseMo
             Matcher matcher = pattern.matcher(senderAddres);
 
             body = body.toLowerCase().replaceAll(",", "");
-            Log.e(TAG, "DoInBackground address: " + senderAddres);
+            Log.e(TAG, "doInBackground() | " + senderAddres + "|" + body);
 
-            if (matcher.find() && body.indexOf("spent") > 0 && body.contains(currencySymbol.toLowerCase())) {
-                Log.e(TAG, "first pattern matched: " + senderAddres + "|" + body);
+            //boolean spentIndex = body.indexOf("spent") > 0 ;
+            boolean containCurrencySymbol = body.contains("rs.");
+            //Log.e(TAG, "SMS contains containCurrencySymbol: " + containCurrencySymbol);
+
+            if (matcher.find() && ((body.indexOf("spent") > 0 && containCurrencySymbol) || body.contains("txn of inr"))) {
+                Log.e(TAG, "First pattern matched");
 
                 MonthWiseModel data = extractData(body);
 
                 if (data != null) {
-                    Log.e(TAG, data.toString());
+                    //Log.e(TAG, data.toString());
                     if (dataList.contains(data)) {
                         int index = dataList.indexOf(data);
                         MonthWiseModel data1 = dataList.get(index);
@@ -79,7 +83,7 @@ public class ParseMonthWiseData extends AsyncTask<Cursor, Void, List<MonthWiseMo
     @Override
     protected void onPostExecute(List<MonthWiseModel> monthWiseModels) {
         super.onPostExecute(monthWiseModels);
-        Log.e(TAG, "onPostExecute : listt : " + monthWiseModels.size());
+        //Log.e(TAG, "onPostExecute : list : " + monthWiseModels.size());
         if (parseMessageCallback != null) {
             parseMessageCallback.onPostExecute(monthWiseModels);
         }

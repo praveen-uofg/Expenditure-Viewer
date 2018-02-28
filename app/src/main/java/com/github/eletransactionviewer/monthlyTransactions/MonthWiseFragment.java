@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
@@ -201,15 +202,26 @@ public class MonthWiseFragment extends Fragment implements ParseMonthWiseData.Pa
 
         Long endOfMonth = cal.getTimeInMillis();
 
-        Log.e(TAG, "Start Of Month: " + startOfMonth + " | end of month: " + endOfMonth);
+        //Log.e(TAG, "Start Of Month: " + startOfMonth + " | end of month: " + endOfMonth);
 
         ContentResolver cr = mContext.getContentResolver();
 
-        mCursor = cr.query(Telephony.Sms.Inbox.CONTENT_URI, // Official CONTENT_URI from docs
-                new String[] { Telephony.Sms.Inbox.ADDRESS, Telephony.Sms.Inbox.DATE, Telephony.Sms.Inbox.BODY}, // Select body text
-                Telephony.TextBasedSmsColumns.DATE + " >= ? and " + Telephony.TextBasedSmsColumns.DATE + " < ?",
-                new String[] {"" + startOfMonth, "" + endOfMonth},
-                Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
+        if (mContext.getPackageManager().hasSystemFeature("android.hardware.telephony")) {
+
+            mCursor = cr.query(Telephony.Sms.Inbox.CONTENT_URI, // Official CONTENT_URI from docs
+                    new String[]{Telephony.Sms.Inbox.ADDRESS, Telephony.Sms.Inbox.DATE, Telephony.Sms.Inbox.BODY}, // Select body text
+                    Telephony.TextBasedSmsColumns.DATE + " >= ? and " + Telephony.TextBasedSmsColumns.DATE + " < ?",
+                    new String[]{"" + startOfMonth, "" + endOfMonth},
+                    Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
+
+        } else {
+            Uri mSmsinboxQueryUri = Uri.parse("content://sms/inbox");
+            mCursor = cr.query(mSmsinboxQueryUri, // Official CONTENT_URI from docs
+                    new String[]{"address", "date", "body"}, // Select body text
+                    "date" + " >= ? and " + "date" + " < ?",
+                    new String[]{"" + startOfMonth, "" + endOfMonth},
+                    "date DESC");
+        }
 
         if (mCursor != null && mCursor.getCount() > 0) {
             Log.e(TAG, "fetchData() Total Messages: " + mCursor.getCount());
@@ -258,7 +270,7 @@ public class MonthWiseFragment extends Fragment implements ParseMonthWiseData.Pa
 
     @Override
     public void onPostExecute(List<MonthWiseModel> dataModelList) {
-        Log.e(TAG, "onPostExecute : listt : " + dataModelList.size());
+        Log.e(TAG, "onPostExecute : list : " + dataModelList.size());
         if (mAdapter == null) {
             mAdapter = new MonthWiseAdaptor();
             mRecyclerView.setAdapter(mAdapter);
