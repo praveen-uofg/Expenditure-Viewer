@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Ele_Sms</string>
+    <string name="app_name">Transaction Viewer</string>
     <string name="action_search">Search</string>
-    <string name="internet_error_msg">Unable to load Transactions. As of now transaction parsing is basd on citi and hdfc messages.</string>
+    <string name="internet_error_msg">Unable to load Transactions. No Transactions Available.</string>
     <string name="no_result_found_msg">No Results Found.</string>
+    <string name="currency">Rs. %1$d.</string>
 
 
     <string-array name="bank_names">
@@ -27,4 +28,11 @@
         <item>HSBC</item>
         <item>Standard Chartered</item>
     </string-array>
+    <string name="title_activity_elemain">ELEMainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_ele__tabbed">ELE_TabbedActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

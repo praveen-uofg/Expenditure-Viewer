@@ -1,15 +1,16 @@
-package com.github.ele_sms.presenter;
+package com.github.eletransactionviewer.BacgroundTask;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-import com.github.ele_sms.model.Data_Model;
+import com.github.eletransactionviewer.model.Data_Model;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -21,12 +22,10 @@ import java.util.regex.Pattern;
 
 public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     private static final String TAG = ParseMessage.class.getSimpleName();
-    private String currencySymbol;
     private ParseMessageCallback parseMessageCallback;
 
 
-    ParseMessage(String currencySymbol, ParseMessageCallback parseMessageCallback) {
-        this.currencySymbol = currencySymbol;
+    public ParseMessage(ParseMessageCallback parseMessageCallback) {
         this.parseMessageCallback = parseMessageCallback;
     }
 
@@ -43,6 +42,10 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
     protected List<Data_Model> doInBackground(Cursor... cursors) {
         Cursor c = cursors[0];
         List<Data_Model> data_modelList = new ArrayList<>();
+        Currency currency = Currency.getInstance("INR");
+        String currencySymbol = currency.getSymbol(new Locale("en", "in"));
+
+
         while (c.moveToNext()) {
             String senderAddres = c.getString(c.getColumnIndexOrThrow("address"));
             String msgDate = c.getString(c.getColumnIndexOrThrow("date"));
@@ -55,20 +58,21 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
 
             body = body.toLowerCase().replaceAll(",", "");
 
-            if (matcher.find() && body.indexOf("credit card") > 0 && body.contains(currencySymbol.toLowerCase())) {
-                Log.e(TAG, body);
+            if (matcher.find() && body.indexOf("spent") > 0 && body.contains(currencySymbol.toLowerCase())) {
+                //Log.e(TAG, body);
                 Data_Model dataModel = parseMessage(body);
                 if (dataModel != null) {
-                    msgDate = "Message Recevied on: " + getDate(msgDate);
+                    msgDate = getDate(msgDate);
                     dataModel.setBankName(matcher.group(1));
                     dataModel.setSmsDate(msgDate);
                     data_modelList.add(dataModel);
-                }
 
+                }
             }
         }
         return data_modelList;
     }
+
 
 
 
@@ -85,19 +89,20 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
         if (transAmountMatcher.find() && cardNumberMatcher.find() && transDateMatcher.find())
         {
 
-            //Log.e(TAG, transAmountMatcher.group(1) + "|" + cardNumberMatcher.group(1) + "|" + transDateMatcher.group(1));
+            Log.e(TAG, transAmountMatcher.group(1) + "|" + cardNumberMatcher.group(1) + "|" + transDateMatcher.group(1));
             String transAmount = NumberFormat.getCurrencyInstance(new Locale("en", "in"))
                     .format(Double.parseDouble(transAmountMatcher.group(1)));
             String transDate = transDateMatcher.group(1);
             String cardNumber = cardNumberMatcher.group(1);
 
-            transAmount = "Amount: " + transAmount;
-            transDate = "Spent On: " + transDate;
+            //transAmount = transAmount;
+            //transDate = "Spent On: " + transDate;
             cardNumber = cardNumber.trim().replaceAll("x", "");
-            cardNumber = "Card Used: xxxxxxxx" + cardNumber;
+            cardNumber = "xxxxxxxx" + cardNumber;
 
             Data_Model data = new Data_Model();
-            data.setTranAmount(transAmount);
+            data.setTransAmountString(transAmount);
+            data.setTransAmount(Double.parseDouble(transAmountMatcher.group(1)));
             data.setTransDate(transDate);
             data.setCardNumber(cardNumber);
 
@@ -119,9 +124,12 @@ public class ParseMessage extends AsyncTask<Cursor, Void, List<Data_Model>> {
         if (parseMessageCallback != null) {
             parseMessageCallback.onPostExecute(data_models);
         }
+
+
+
     }
 
-    interface ParseMessageCallback {
+    public interface ParseMessageCallback {
         void onPreExecute();
         void onPostExecute(List<Data_Model> dataModelList);
     }

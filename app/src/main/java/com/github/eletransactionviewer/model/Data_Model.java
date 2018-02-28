@@ -1,4 +1,4 @@
-package com.github.ele_sms.model;
+package com.github.eletransactionviewer.model;
 
 /**
  * Created by AT-Praveen on 20/02/18.
@@ -6,10 +6,11 @@ package com.github.ele_sms.model;
 
 public class Data_Model {
     private String bankName;
-    private String tranAmount;
+    private String transAmountString;
     private String transDate;
     private String smsDate;
     private String cardNumber;
+    private Double transAmount;
 
     public Data_Model() {
     }
@@ -22,12 +23,12 @@ public class Data_Model {
         this.bankName = bankName;
     }
 
-    public String getTranAmount() {
-        return tranAmount;
+    public String getTransAmountString() {
+        return transAmountString;
     }
 
-    public void setTranAmount(String tranAmount) {
-        this.tranAmount = tranAmount;
+    public void setTransAmountString(String transAmountString) {
+        this.transAmountString = transAmountString;
     }
 
     public String getTransDate() {
@@ -54,4 +55,11 @@ public class Data_Model {
         this.cardNumber = cardNumber;
     }
 
+    public Double getTransAmount() {
+        return transAmount;
+    }
+
+    public void setTransAmount(Double transAmount) {
+        this.transAmount = transAmount;
+    }
 }

@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="dataModel"
-            type="com.github.ele_sms.model.Data_Model"
+            name="allTransactionData"
+            type="com.github.eletransactionviewer.model.Data_Model"
             />
     </data>
 
@@ -36,8 +36,7 @@
                     android:paddingTop="@dimen/article_title_padding"
                     android:singleLine="true"
                     android:textColor="@android:color/black"
-                    android:textSize="24dp"
-                    android:text="@{dataModel.bankName}"
+                    android:text="@{allTransactionData.bankName}"
                     card_view:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
@@ -47,10 +46,24 @@
                     android:layout_marginStart="8dp"
                     android:paddingTop="@dimen/article_title_padding"
                     android:singleLine="true"
-                    android:text="@{dataModel.cardNumber}"
-                    android:textSize="16dp"
+                    android:text="@{allTransactionData.cardNumber}"
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintTop_toBottomOf="@id/bank_name" />
+
+
+                <TextView
+                    android:id="@+id/trans_amount_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingTop="@dimen/article_title_padding"
+                    android:paddingBottom="@dimen/article_title_padding"
+                    android:singleLine="true"
+                    android:text="Amount Spent: "
+                    android:textSize="@dimen/article_title"
+                    card_view:layout_constraintStart_toStartOf="parent"
+                    card_view:layout_constraintTop_toBottomOf="@id/card_number" />
 
                 <TextView
                     android:id="@+id/trans_amount"
@@ -61,10 +74,25 @@
                     android:paddingTop="@dimen/article_title_padding"
                     android:paddingBottom="@dimen/article_title_padding"
                     android:singleLine="true"
-                    android:text="@{dataModel.tranAmount}"
+                    android:text="@{allTransactionData.transAmountString}"
+                    android:textSize="@dimen/article_title"
+                    card_view:layout_constraintStart_toEndOf="@id/trans_amount_view"
+                    card_view:layout_constraintTop_toBottomOf="@id/card_number" />
+
+
+                <TextView
+                    android:id="@+id/trans_date_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:paddingTop="@dimen/article_title_padding"
+                    android:paddingBottom="@dimen/article_title_padding"
+                    android:singleLine="true"
+                    android:text="Transaction Date: "
                     android:textSize="@dimen/article_title"
                     card_view:layout_constraintStart_toStartOf="parent"
-                    card_view:layout_constraintTop_toBottomOf="@id/card_number" />
+                    card_view:layout_constraintTop_toBottomOf="@id/trans_amount_view" />
 
                 <TextView
                     android:id="@+id/trans_date"
@@ -74,9 +102,9 @@
                     android:layout_marginEnd="8dp"
                     android:paddingTop="@dimen/article_title_padding"
                     android:singleLine="true"
-                    android:text="@{dataModel.transDate}"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintBaseline_toBaselineOf="@id/trans_amount"/>
+                    android:text="@{allTransactionData.transDate}"
+                    card_view:layout_constraintStart_toEndOf="@id/trans_date_view"
+                    card_view:layout_constraintBaseline_toBaselineOf="@id/trans_date_view"/>
 
                 <TextView
                     android:id="@+id/sms_date"
@@ -86,10 +114,10 @@
                     android:layout_marginStart="8dp"
                     android:paddingBottom="@dimen/article_title_padding"
                     android:textSize="@dimen/article_title"
-                    android:text="@{dataModel.smsDate}"
+                    android:text="@{allTransactionData.smsDate}"
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintTop_toBottomOf="@+id/trans_amount" />
+                    card_view:layout_constraintTop_toBottomOf="@+id/trans_date_view" />
 
             </android.support.constraint.ConstraintLayout>
 

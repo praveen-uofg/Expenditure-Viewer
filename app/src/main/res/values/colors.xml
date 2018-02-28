@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#26c6da</color>
+    <color name="colorPrimaryDark">#0095a8</color>
+    <color name="colorAccent">#6ff9ff</color>
     <color name="article_title">#4c4c4c</color>
     <color name="article_subtitle">#4c4c4c</color>
     <color name="article_title_background">#4DB6AC</color>
+    <color name="card_background_heading">#006064</color>
+    <color name="card_background">#E0F7FA</color>
 </resources>
